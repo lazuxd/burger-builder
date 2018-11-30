@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 
 import axios from '../../axios-orders';
 
@@ -58,21 +59,13 @@ class BurgerBuilder extends React.Component {
         this.setState({purchasing: isPurchasing});
     }
     order = () => {
-        this.setState({sendingOrder: true});
-        const order = {
-            name: "Chuck Norris",
-            address: "Behind you",
-            ingredients: this.state.ingredients,
-            totalPrice: this.state.burgerPrice,
-            deliveryMethod: "Back-in-Time Delivery"
-        };
-        axios.post('orders.json', order)
-            .then(response => {
-                this.setState({sendingOrder: false, purchasing: false});
-            })
-            .catch(error => {
-                this.setState({sendingOrder: false, purchasing: false});
-            });
+        let strURL = Object.entries(this.state.ingredients).reduce((str, arr) => {
+            str += arr[0] + '=' + arr[1] + '&';
+            return str;
+        }, '');
+        strURL += 'burgerPrice=' + this.state.burgerPrice;
+        strURL = encodeURI(strURL);
+        this.props.history.push('/checkout?'+strURL);
     }
     render() {
 
@@ -110,4 +103,4 @@ class BurgerBuilder extends React.Component {
     }
 }
 
-export default withErrorHandling(BurgerBuilder, axios);
+export default withErrorHandling(withRouter(BurgerBuilder), axios);

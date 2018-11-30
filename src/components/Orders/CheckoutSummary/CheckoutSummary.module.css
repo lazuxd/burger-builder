@@ -1,0 +1,16 @@
+.CheckoutSummary {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* .CheckoutSummary h1 {
+    text-align: center;
+} */
+
+/* .Buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
