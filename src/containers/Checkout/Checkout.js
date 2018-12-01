@@ -3,7 +3,7 @@ import { Route, withRouter } from 'react-router-dom';
 import axios from '../../axios-orders';
 
 import CheckoutSummary from '../../components/Orders/CheckoutSummary/CheckoutSummary';
-import ContactInfo from '../../components/Orders/ContactInfo/ContactInfo';
+import ContactInfo from '../ContactInfo/ContactInfo';
 import classes from './Checkout.module.css';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandling from '../../hoc/withErrorHandling/withErrorHandling';
@@ -32,14 +32,12 @@ class Checkout extends React.Component {
         }
         this.setState({ingredients, burgerPrice});
     }
-    makeOrder = () => {
+    makeOrder = (orderInfo) => {
         this.setState({sendingOrder: true});
         const order = {
-            name: "Chuck Norris",
-            address: "Behind you",
             ingredients: this.state.ingredients,
             totalPrice: this.state.burgerPrice,
-            deliveryMethod: "Back-in-Time Delivery"
+            orderInfo
         };
         axios.post('orders.json', order)
             .then(response => {

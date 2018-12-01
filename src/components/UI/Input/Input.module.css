@@ -1,0 +1,23 @@
+.InputContainer {
+    width: 100%;
+    margin: 10px;
+}
+
+.InputContainer:last-child {
+    margin-bottom: 30px;
+}
+
+
+.Input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px 10px;
+    font-size: 1.2em;
+    outline: none;
+    border: 1px solid #ccc;
+}
+
+.Invalid {
+    background-color: rgb(233, 133, 153);
+    border: 1px solid red;
+}
