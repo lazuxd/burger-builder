@@ -2,6 +2,8 @@ import React from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import axios from '../../axios-orders';
 
+import { connect } from 'react-redux';
+
 import CheckoutSummary from '../../components/Orders/CheckoutSummary/CheckoutSummary';
 import ContactInfo from '../ContactInfo/ContactInfo';
 import classes from './Checkout.module.css';
@@ -10,33 +12,13 @@ import withErrorHandling from '../../hoc/withErrorHandling/withErrorHandling';
 
 class Checkout extends React.Component {
     state = {
-        ingredients: {
-            bacon: 0,
-            cheese: 0,
-            meat: 0,
-            salad: 0
-        },
-        burgerPrice: 0,
         sendingOrder: false
-    }
-    componentDidMount() {
-        let params = new URLSearchParams(this.props.location.search);
-        let ingredients = {};
-        let burgerPrice = 0;
-        for (let param of params) {
-            if (param[0] === 'burgerPrice') {
-                burgerPrice = param[1];
-                continue;
-            }
-            ingredients[param[0]] = parseInt(param[1]);
-        }
-        this.setState({ingredients, burgerPrice});
     }
     makeOrder = (orderInfo) => {
         this.setState({sendingOrder: true});
         const order = {
-            ingredients: this.state.ingredients,
-            totalPrice: this.state.burgerPrice,
+            ingredients: this.props.ingredients,
+            totalPrice: this.props.burgerPrice,
             orderInfo
         };
         axios.post('orders.json', order)
@@ -56,7 +38,7 @@ class Checkout extends React.Component {
         return (
             <div className={classes.Checkout}>
                 <CheckoutSummary
-                    ingredients={this.state.ingredients}
+                    ingredients={this.props.ingredients}
                     cancel={() => {this.props.history.replace('/');}}
                     continue={() => {this.props.history.replace('/checkout/contact-info');}}
                 />
@@ -69,4 +51,16 @@ class Checkout extends React.Component {
     }
 }
 
-export default withErrorHandling(withRouter(Checkout), axios);
+const mapStateToProps = state => ({
+    ingredients: state.ingredients.quantity,
+    burgerPrice: state.ingredients.burgerPrice
+});
+
+const mapDispatchToProps = dispatch => ({
+
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withErrorHandling(withRouter(Checkout), axios));
