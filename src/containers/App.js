@@ -8,10 +8,17 @@ import Checkout from './Checkout/Checkout';
 import Orders from './Orders/Orders';
 import Authenticate from './Authenticate/Authenticate';
 import Logout from '../components/Logout/Logout';
+import * as actions from '../redux/actions';
 
 const GotoRoot = props => <Redirect to="/" />;
 
 class App extends Component {
+  componentDidMount() {
+    const authData = sessionStorage.getItem('authInfo');
+    if (authData) {
+      this.props.setAuth(JSON.parse(authData));
+    }
+  }
   render() {
     return (
       <BrowserRouter>
@@ -34,6 +41,11 @@ const mapStateToProps = state => ({
   isAuthenticate: state.auth.token !== null
 })
 
+const mapDispatchToProps = dispatch => ({
+  setAuth: (authData) => dispatch(actions.setAuth(authData))
+});
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(App);

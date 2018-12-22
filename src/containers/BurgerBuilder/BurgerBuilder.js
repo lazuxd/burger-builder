@@ -22,7 +22,7 @@ class BurgerBuilder extends React.Component {
         error: false
     }
     componentDidMount() {
-        this.props.loadIngredients();
+        if (!this.props.ingredients) this.props.loadIngredients();
     }
     purchase = (isPurchasing) => {
         this.setState({purchasing: isPurchasing});

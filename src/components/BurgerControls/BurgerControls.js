@@ -1,7 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import classes from './BurgerControls.module.css';
 import BurgerControl from './BurgerControl/BurgerControl';
+import * as actions from '../../redux/actions';
 
 import { capitalize } from '../../tools/functions';
 
@@ -25,12 +28,30 @@ const BurgerControls = props => {
             <button
                 disabled={!canPurchase}
                 className={classes.OrderButton}
-                onClick={props.purchase.bind(null, true)}
+                onClick={() => {
+                    if (props.isAuthenticate) {
+                        props.purchase(true);
+                    } else {
+                        props.startBuying();
+                        props.history.push('/authenticate');
+                    }
+                }}
             >
-                ORDER NOW
+                {props.isAuthenticate ? '' : 'SIGNUP TO '}ORDER NOW
             </button>
         </div>
     );
 }
 
-export default BurgerControls;
+const mapStateToProps = state => ({
+    isAuthenticate: state.auth.token !== null
+});
+
+const mapDispatchToProps = dispatch => ({
+    startBuying: () => dispatch(actions.startBuying())
+});
+
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(BurgerControls));

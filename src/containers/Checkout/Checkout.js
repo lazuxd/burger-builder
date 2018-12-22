@@ -19,15 +19,17 @@ class Checkout extends React.Component {
     makeOrder = (orderInfo) => {
         this.setState({sendingOrder: true});
         const order = {
+            userId: this.props.userId,
             ingredients: this.props.ingredients,
             totalPrice: this.props.burgerPrice,
             orderInfo
         };
-        axios.post('orders.json', order)
+        axios.post('orders.json?auth='+this.props.token, order)
             .then(response => {
                 this.setState({sendingOrder: false});
                 this.props.history.replace('/');
                 this.props.reloadIngredients();
+                this.props.stopBuying();
             })
             .catch(error => {
                 this.setState({sendingOrder: false});
@@ -56,11 +58,14 @@ class Checkout extends React.Component {
 
 const mapStateToProps = state => ({
     ingredients: state.ingredients.quantity,
-    burgerPrice: state.ingredients.burgerPrice
+    burgerPrice: state.ingredients.burgerPrice,
+    userId: state.auth.id,
+    token: state.auth.token
 });
 
 const mapDispatchToProps = dispatch => ({
-    reloadIngredients: () => dispatch(actions.loadIngredients())
+    reloadIngredients: () => dispatch(actions.loadIngredients()),
+    stopBuying: () => dispatch(actions.stopBuying())
 });
 
 export default connect(

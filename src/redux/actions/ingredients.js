@@ -26,7 +26,7 @@ export const setIngredient = ingredients => {
 };
 
 export const loadIngredients = () => {
-    return dispatch => {
+    return (dispatch) => {
         axios.get('ingredients.json')
             .then(response => {
                 dispatch(setIngredient(response.data));

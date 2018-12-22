@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Button from '../../components/UI/Button/Button';
@@ -74,6 +74,9 @@ class Authenticate extends React.Component {
             return {authForm};
         });
     }
+    gotoCheckout = () => {
+        this.props.history.replace('/checkout');
+    }
     render() {
         if (this.props.isAuthenticate) {
             return <Redirect to="/" />;
@@ -110,10 +113,11 @@ class Authenticate extends React.Component {
                     onClick={() => {
                         const email = this.state.authForm.email.value;
                         const password = this.state.authForm.password.value;
+                        const gotoCheckout = this.props.isBuying ? this.gotoCheckout : null
                         if (this.state.signup) {
-                            this.props.onSignup(email, password);
+                            this.props.onSignup(email, password, gotoCheckout);
                         } else {
-                            this.props.onSignin(email, password);
+                            this.props.onSignin(email, password, gotoCheckout);
                         }
                     }}
                     disabled={!Object.values(this.state.authForm).reduce((validAll, {valid}) => (validAll & valid), true)}
@@ -134,15 +138,16 @@ class Authenticate extends React.Component {
 const mapStateToProps = state => ({
     wait: state.auth.wait,
     error: state.auth.error,
-    isAuthenticate: state.auth.token !== null
+    isAuthenticate: state.auth.token !== null,
+    isBuying: state.auth.isBuying
 });
 
 const mapDispatchToProps = dispatch => ({
-    onSignup: (email, password) => dispatch(actions.signup(email, password)),
-    onSignin: (email, password) => dispatch(actions.signin(email, password))
+    onSignup: (email, password, onSuccess) => dispatch(actions.signup(email, password, onSuccess)),
+    onSignin: (email, password, onSuccess) => dispatch(actions.signin(email, password, onSuccess))
 })
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(Authenticate);
+)(Authenticate));
