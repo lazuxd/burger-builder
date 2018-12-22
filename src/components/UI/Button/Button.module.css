@@ -23,6 +23,10 @@
     color: #944317;
 }
 
+.Info {
+    color: #319791;
+}
+
 .Disabled {
     color: #ccc;
     cursor: not-allowed;

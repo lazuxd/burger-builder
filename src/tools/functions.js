@@ -3,3 +3,10 @@ export const capitalize = str => (
     .map((ch, i) => i === 0 ? ch.toUpperCase() : ch)
     .join('')
 );
+
+export const updateObject = (obj, dataToUpdate) => {
+    return {
+        ...obj,
+        ...dataToUpdate
+    };
+};

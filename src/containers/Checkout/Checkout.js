@@ -10,6 +10,8 @@ import classes from './Checkout.module.css';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandling from '../../hoc/withErrorHandling/withErrorHandling';
 
+import * as actions from '../../redux/actions';
+
 class Checkout extends React.Component {
     state = {
         sendingOrder: false
@@ -25,6 +27,7 @@ class Checkout extends React.Component {
             .then(response => {
                 this.setState({sendingOrder: false});
                 this.props.history.replace('/');
+                this.props.reloadIngredients();
             })
             .catch(error => {
                 this.setState({sendingOrder: false});
@@ -57,7 +60,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-
+    reloadIngredients: () => dispatch(actions.loadIngredients())
 });
 
 export default connect(

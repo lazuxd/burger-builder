@@ -1,4 +1,4 @@
-import * as actions from '../actions';
+import * as actions from '../actions/ingredients';
 
 const INGREDIENT_PRICES = {
     meat: 1.2,
@@ -34,6 +34,18 @@ const ingredientsReducer = (state = initialState, action) => {
                     [action.ingredient]: state.quantity[action.ingredient] - 1
                 },
                 burgerPrice: state.burgerPrice - INGREDIENT_PRICES[action.ingredient]
+            };
+        case actions.SET_INGREDIENTS:
+            const ing = {
+                ...state.quantity,
+                ...action.ingredients
+            };
+            return {
+                quantity: ing,
+                burgerPrice: Object.entries(ing).reduce((total, entrie) => {
+                    total += entrie[1] * INGREDIENT_PRICES[entrie[0]];
+                    return total;
+                }, 4)
             };
         default:
             return state;
