@@ -21,7 +21,7 @@ class App extends Component {
   }
   render() {
     return (
-      <BrowserRouter>
+      <BrowserRouter basename="/Websites/BurgerBuilder">
         <Layout>
           <Switch>
             <Route path="/" exact component={BurgerBuilder} />
