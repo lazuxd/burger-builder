@@ -1,17 +1,14 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import NavigationItem from './NavigationItem/NavigationItem';
 import classes from './NavigationItems.module.css';
 
-import { NavLink } from 'react-router-dom';
-
 const NavigationItems = props => {
     return (
         <ul className={classes.NavigationItems}>
-            <NavLink to="/" exact activeStyle={{color: 'lime'}}>Home</NavLink>
-            <NavLink to="/authenticate" activeStyle={{color: 'lime'}}>Authenticate</NavLink>
-            {/* <NavigationItem link="/" exact>Burger Builder</NavigationItem>
+            <NavigationItem link="/" exact>Burger Builder</NavigationItem>
             {
                 props.isAuthenticate ?
                 <>
@@ -19,7 +16,7 @@ const NavigationItems = props => {
                     <NavigationItem link="/logout">Logout</NavigationItem>
                 </> :
                 <NavigationItem link="/authenticate">Authenticate</NavigationItem>
-            } */}
+            }
         </ul>
     );
 }
@@ -28,6 +25,6 @@ const mapStateToProps = (state) => ({
     isAuthenticate: state.auth.token !== null
 })
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps
-)(NavigationItems);
+)(NavigationItems));
